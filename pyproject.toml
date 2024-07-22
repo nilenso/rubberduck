@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "rubberduck"
+version = "0.1.0"
+description = ""
+authors = ["Govind krishna Joshi <govind@nilenso.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+llama-index-core = "^0.10.56"
+
+
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
