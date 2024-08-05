@@ -1,0 +1,6 @@
+---
+- name: Apply common configuration to all hosts
+  hosts: all
+  remote_user: ubuntu
+  roles:
+    - common

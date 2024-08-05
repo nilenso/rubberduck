@@ -1,0 +1,47 @@
+- name: Update apt packages
+  apt:
+    upgrade: yes
+    update_cache: yes
+  become: true
+
+- name: Reboot system if required
+  shell: sleep 2 && shutdown -r now 'Rebooting to complete system upgrade'
+  async: 1
+  poll: 0
+  args:
+    removes: /var/run/reboot-required
+  become: true
+  register: restart_system
+
+- name: Wait for server to restart
+  local_action: wait_for host={{ inventory_hostname }} port=22 delay=2 timeout=3000
+  when: restart_system.changed
+
+- name: Create deploy group
+  group:
+    name: deploy
+    state: present
+  become: true
+
+- name: Create deploy user
+  user:
+    name: deploy
+    group: deploy
+    state: present
+    create_home: yes
+    shell: /bin/bash
+  become: true
+
+- name: add ssh keys for ubuntu
+  become: true
+  authorized_key:
+    key: "{% for key in query('fileglob', 'ssh_keys/*') %}{{ lookup('file', key) ~ '\n'}}{% endfor %}"
+    user: ubuntu
+    exclusive: yes
+
+- name: add ssh keys for the deploy user
+  become: true
+  authorized_key:
+    key: "{% for key in query('fileglob', 'ssh_keys/*') %}{{ lookup('file', key) ~ '\n'}}{% endfor %}"
+    user: deploy
+    exclusive: yes

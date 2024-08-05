@@ -40,11 +40,12 @@ resource "aws_budgets_budget" "monthly_budget" {
 
 
 resource "aws_instance" "llama_instance" {
-  ami = "ami-077e64cd70ca45980"
   instance_type = "inf1.2xlarge"
+  ami = "ami-026ebaaa7f5422703"
 
   tags = {
     Name = "llama-inference-instance"
+    Application = "inference"
   }
 
   # You may need to specify a key pair for SSH access
@@ -58,4 +59,9 @@ resource "aws_instance" "llama_instance" {
     volume_type = "gp3"
     volume_size = 100  # Adjust based on your storage needs
   }
+}
+
+resource "aws_ec2_instance_state" "llama_instance_state" {
+  instance_id = aws_instance.llama_instance.id
+  state = "running"
 }

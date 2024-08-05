@@ -1,0 +1,6 @@
+plugin: amazon.aws.aws_ec2
+aws_profile: nilenso
+filters:
+  instance-state-name: running
+groups:
+  inference: "'inference' in tags.Application"
