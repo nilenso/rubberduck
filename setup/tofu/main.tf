@@ -63,5 +63,5 @@ resource "aws_instance" "llama_instance" {
 
 resource "aws_ec2_instance_state" "llama_instance_state" {
   instance_id = aws_instance.llama_instance.id
-  state = "running"
+  state = "stopped"
 }
